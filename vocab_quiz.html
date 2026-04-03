@@ -151,6 +151,7 @@
         </div>
     </form>
 </div>
+
 <script>
     // PASTE YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL HERE:
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzIAkrqq5k_if0yOaDQvoz63X4D86vMIcjWTEgBT_3liPd-eEt22kaWf-Z0xFZYD30kiQ/exec';
@@ -193,24 +194,11 @@
         { id: 'q35', text: 'The young nurse quickly rushed to the pediatric ___ to check on the crying baby.', options: ['ward', 'trail', 'sight', 'magazine'] }
     ];
 
-    // --- NEW: Fisher-Yates Shuffle Function ---
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
     const container = document.getElementById('questionsContainer');
 
     // 1. Dynamically render questions
     questionsData.forEach((q, index) => {
-        
-        // Shuffle the options for this specific question
-        let shuffledOptions = shuffleArray([...q.options]);
-
-        let optionsHTML = shuffledOptions.map(opt => `
+        let optionsHTML = q.options.map(opt => `
             <label class="option-label">
                 <input type="radio" name="${q.id}" value="${opt}" required>
                 <span>${opt}</span>
@@ -246,6 +234,7 @@
         }
 
         try {
+            // CRITICAL: credentials 'omit' bypasses 403 errors when users have multiple Google profiles logged in
             const response = await fetch(`${scriptURL}?${params.toString()}`, {
                 method: 'GET',
                 credentials: 'omit' 
