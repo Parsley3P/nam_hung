@@ -196,9 +196,22 @@
 
     const container = document.getElementById('questionsContainer');
 
+    // Function to shuffle an array (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+        let shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
     // 1. Dynamically render questions
     questionsData.forEach((q, index) => {
-        let optionsHTML = q.options.map(opt => `
+        // Shuffle the options before rendering them
+        let randomizedOptions = shuffleArray(q.options);
+        
+        let optionsHTML = randomizedOptions.map(opt => `
             <label class="option-label">
                 <input type="radio" name="${q.id}" value="${opt}" required>
                 <span>${opt}</span>
