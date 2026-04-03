@@ -195,10 +195,25 @@
     ];
 
     const container = document.getElementById('questionsContainer');
+// --- NEW: Fisher-Yates Shuffle Function ---
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    const container = document.getElementById('questionsContainer');
 
     // 1. Dynamically render questions
     questionsData.forEach((q, index) => {
-        let optionsHTML = q.options.map(opt => `
+        
+        // --- NEW: Shuffle the options for this specific question ---
+        let shuffledOptions = shuffleArray([...q.options]);
+
+        // Use the shuffledOptions instead of q.options
+        let optionsHTML = shuffledOptions.map(opt => `
             <label class="option-label">
                 <input type="radio" name="${q.id}" value="${opt}" required>
                 <span>${opt}</span>
